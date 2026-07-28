@@ -1,4 +1,4 @@
- const API_URL = " https://dose-backboard-wolverine.ngrok-free.dev";
+ const API_URL = "https://dose-backboard-wolverine.ngrok-free.dev";
 
 export async function register(username: string, password: string) {
     const userData = { username, password };

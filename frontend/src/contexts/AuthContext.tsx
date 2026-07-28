@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const logout = async () => {
 
-        await fetch("http://127.0.0.1:8000/logout", {
+        await fetch("https://dose-backboard-wolverine.ngrok-free.dev/logout", {
             method: "POST",
             credentials: "include",
         });
