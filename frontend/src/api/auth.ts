@@ -1,11 +1,11 @@
- const API_URL = "http://127.0.0.1:8000";
+ const API_URL = " https://dose-backboard-wolverine.ngrok-free.dev";
 
 export async function register(username: string, password: string) {
     const userData = { username, password };
 
     const response = await fetch(`${API_URL}/register`, {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
         body: JSON.stringify(userData)
     });
 
@@ -22,6 +22,7 @@ export async function loginAPI(username: string, password: string) {
         credentials: "include",
         headers: {
             "Content-Type": "application/json",
+            'ngrok-skip-browser-warning': 'true',
         },
         body: JSON.stringify(userData),
     });

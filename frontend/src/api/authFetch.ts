@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = " https://dose-backboard-wolverine.ngrok-free.dev";
 
 export async function authFetch(
     endpoint: string,
@@ -12,6 +12,7 @@ export async function authFetch(
         headers: {
             ...options.headers,
             Authorization: `Bearer ${token}`,
+            'ngrok-skip-browser-warning': 'true',
         },
     });
 
@@ -41,6 +42,7 @@ export async function authFetch(
         headers: {
             ...options.headers,
             Authorization: `Bearer ${token}`,
+            'ngrok-skip-browser-warning': 'true'
         },
     });
 }
