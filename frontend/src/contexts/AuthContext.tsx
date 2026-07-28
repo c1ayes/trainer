@@ -31,6 +31,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await fetch("https://dose-backboard-wolverine.ngrok-free.dev/logout", {
             method: "POST",
             credentials: "include",
+            headers:{
+                'ngrok-skip-browser-warning': 'true',
+            }
         });
 
         localStorage.removeItem("access_token");
