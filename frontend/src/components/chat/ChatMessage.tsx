@@ -6,9 +6,10 @@ interface Message {
 
 interface ChatMessageProps {
     messages: Message[];
+    isSending: boolean;
 }
 
-const ChatMessage = ({ messages }: ChatMessageProps) => {
+const ChatMessage = ({ messages, isSending }: ChatMessageProps) => {
     return (
         <div className="flex flex-col gap-5">
 
@@ -45,6 +46,19 @@ const ChatMessage = ({ messages }: ChatMessageProps) => {
 
             ))}
 
+            {isSending && (
+                <div className="flex gap-3 justify-start">
+
+                    <div className="h-10 w-10 rounded-full border border-cyan-500 flex items-center justify-center">
+                        AI
+                    </div>
+
+                    <div className="rounded-xl border border-slate-700 bg-[#101C2D] p-4 text-slate-400">
+                        Загрузка... сообщение отправляется
+                    </div>
+
+                </div>
+            )}
         </div>
     );
 };

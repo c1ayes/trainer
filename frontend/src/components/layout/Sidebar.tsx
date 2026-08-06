@@ -12,7 +12,7 @@ export interface Message {
 }
 
 const Sidebar = () => {
-
+    const [isSending, setIsSending] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const { currentConversationId, messageListVersion } = useConversation();
 
@@ -61,14 +61,20 @@ const Sidebar = () => {
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto p-4 lg:p-6">
-                <ChatMessage messages={messages} />
+                <ChatMessage
+                    messages={messages}
+                    isSending={isSending}
+                />
             </div>
 
             <ChatInput
                 setMessages={setMessages}
+                isSending={isSending}
+                setIsSending={setIsSending}
             />
+
         </aside>
     );
 };
 
-export default Sidebar;
+export default Sidebar

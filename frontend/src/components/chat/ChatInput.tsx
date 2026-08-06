@@ -7,13 +7,17 @@ import type { Message } from "../layout/Sidebar";
 
 interface ChatInputProps {
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+    isSending: boolean;
+    setIsSending: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ChatInput = ({ setMessages }: ChatInputProps) => {
+const ChatInput = ({
+    setMessages,
+    isSending,
+    setIsSending
+}: ChatInputProps) => {
 
     const [content, setContent] = useState("");
-    const [isSending, setIsSending] = useState(false);
-
     const {
         currentConversationId,
         setCurrentConversationId,

@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Environment
+.env
+
+# Temporary files
+backend/app/temp_saves/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Storeв
+Thumbs.db
