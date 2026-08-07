@@ -40,7 +40,7 @@ async def create_conversation(
 ):
     return await repo.create(
         user_id=current_user.id,
-        title=data.title,
+        title=data.title[:25],
     )
 
 @router.patch("/{conversation_id}")

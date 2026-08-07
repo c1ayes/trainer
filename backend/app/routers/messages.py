@@ -35,7 +35,7 @@ async def send_message(
 
         conversation = await conversation_repo.create(
             user_id=current_user.id,
-            title=data.content,
+            title=data.content[:50],
         )
 
     else:

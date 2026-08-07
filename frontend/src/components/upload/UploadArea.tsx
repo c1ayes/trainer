@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useResult } from "../../contexts/ResultContext";
 
 type UploadAreaProps = {
     selectedFile: File | null;
@@ -9,11 +10,19 @@ type UploadAreaProps = {
     setArm: React.Dispatch<React.SetStateAction<"left" | "right">>;
 };
 
-
-const UploadArea = ({ selectedFile, onFileSelect, onAnalyse, loading, arm, setArm }: UploadAreaProps) => {
+const UploadArea = ({
+    selectedFile,
+    onFileSelect,
+    onAnalyse,
+    loading,
+    arm,
+    setArm,
+}: UploadAreaProps) => {
     const [dragging, setDragging] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const { result, setResult } = useResult();
 
     const handleFile = (file: File | null) => {
         if (!file) return;
@@ -42,6 +51,61 @@ const UploadArea = ({ selectedFile, onFileSelect, onAnalyse, loading, arm, setAr
 
         handleFile(file);
     };
+
+    const handleUploadAnother = () => {
+        setResult(undefined);
+        onFileSelect(null);
+
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
+    };
+
+
+    if (result?.video_url) {
+        console.log("VIDEO URL:", result?.video_url);
+        return (
+            <div className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 lg:p-6">
+                <div className="mx-auto flex w-full max-w-5xl flex-col items-center">
+
+                    <h2 className="mb-5 text-center text-2xl font-bold uppercase tracking-wider text-slate-300 sm:text-3xl">
+                        Ваше проанализированное видео
+                    </h2>
+                    
+                    <div className="w-full overflow-hidden rounded-2xl border border-slate-800 bg-[#0A1321] shadow-2xl">
+                        <video
+                            src={`${result.video_url}?ngrok-skip-browser-warning=true`}
+                            controls
+                            playsInline
+                            className="aspect-video w-full bg-black object-contain"
+                        >
+                            Ваш браузер не поддерживает воспроизведение видео.
+                        </video>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={handleUploadAnother}
+                        className="
+                            mt-6
+                            rounded-2xl
+                            bg-cyan-500
+                            px-6
+                            py-3
+                            text-lg
+                            font-semibold
+                            text-slate-950
+                            transition
+                            hover:bg-cyan-400
+                            cursor-pointer
+                        "
+                    >
+                        Загрузить другое видео
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-0 min-w-0 flex-1 overflow-y-auto p-3 sm:p-4 lg:p-6">
@@ -113,26 +177,82 @@ const UploadArea = ({ selectedFile, onFileSelect, onAnalyse, loading, arm, setAr
                 </p>
 
                 {selectedFile && (
-                    <div>
-                        <p className="mt-5 text-cyan-400 text-sm p-2">
-                            Selected: {selectedFile.name}
-                        </p>
-                        
-                    </div>
+                    <p className="mt-5 rounded-lg p-2 text-sm text-cyan-400">
+                        Selected: {selectedFile.name}
+                    </p>
                 )}
             </label>
-            <div className="flex flex-col justify-center items-center">
-                <div>
-                    <p className="text-white font-semibold text-lg mt-2">Выберите руку, которую лучше видно на видео</p>
-                    <ul className="flex justify-between text-white text-lg">
-                        <button className={`${arm === 'left' && "bg-cyan-400"} font-semibold rounded-2xl px-2 p-1 mt-2 cursor-pointer`} onClick={() => {setArm('left')}}>Левая рука</button>
-                        <button className={`${arm === 'right' && "bg-cyan-400"} font-semibold rounded-2xl px-2 p-1 mt-2 cursor-pointer`} onClick={() => {setArm('right')}}>Правая рука</button>
-                    </ul>
-                </div>
-                <button className="p-2 text-lg text-white bg-indigo-500 rounded-2xl mt-2 px-5 cursor-pointer disabled:bg-gray-600 disabled:cursor-auto" onClick={onAnalyse} disabled={!selectedFile || loading}> 
-                    {loading ? "Смотрим ваше видео..." : "Начать анализ"}
-                </button>
 
+            <div className="flex flex-col items-center justify-center">
+                <div>
+                    <p className="mt-2 text-center text-lg font-semibold text-white">
+                        Выберите руку, которую лучше видно на видео
+                    </p>
+
+                    <div className="flex justify-center gap-3 text-lg text-white">
+                        <button
+                            type="button"
+                            className={`
+                                mt-2
+                                cursor-pointer
+                                rounded-2xl
+                                px-3
+                                py-1
+                                font-semibold
+                                ${
+                                    arm === "left"
+                                        ? "bg-cyan-400 text-slate-950"
+                                        : "bg-slate-800"
+                                }
+                            `}
+                            onClick={() => setArm("left")}
+                        >
+                            Левая рука
+                        </button>
+
+                        <button
+                            type="button"
+                            className={`
+                                mt-2
+                                cursor-pointer
+                                rounded-2xl
+                                px-3
+                                py-1
+                                font-semibold
+                                ${
+                                    arm === "right"
+                                        ? "bg-cyan-400 text-slate-950"
+                                        : "bg-slate-800"
+                                }
+                            `}
+                            onClick={() => setArm("right")}
+                        >
+                            Правая рука
+                        </button>
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    className="
+                        mt-4
+                        cursor-pointer
+                        rounded-2xl
+                        bg-indigo-500
+                        px-5
+                        py-2
+                        text-lg
+                        text-white
+                        disabled:cursor-auto
+                        disabled:bg-gray-600
+                    "
+                    onClick={onAnalyse}
+                    disabled={!selectedFile || loading}
+                >
+                    {loading
+                        ? "Смотрим ваше видео..."
+                        : "Начать анализ"}
+                </button>
             </div>
         </div>
     );
